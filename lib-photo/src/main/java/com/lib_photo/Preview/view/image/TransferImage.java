@@ -31,6 +31,32 @@ import static android.content.ContentValues.TAG;
  */
 public class TransferImage extends PhotoView {
 
+
+    /**
+     * ==========================融合下拉关闭和动画预览===========================
+
+     1.正常情况下，首先会初始化动画view的相关信息，比如位置、scale等，然后根据是
+     进还是出，设置属性动画动态获取信息的变化，通过变化的信息画出动画view，从而体
+     现出动画效果
+
+
+     2.在移动view的位置之后，该如何设置view的开始位置呢
+
+     -- 移动后，图片的scale值、左上角坐标、图片长宽，如何计算
+
+     - 最后的scale值等于之前的和移动变化的乘积，左上角坐标可以用通过location方
+     法计算，图片长宽可以用实际长宽乘以scale值得到，
+
+
+     3.view信息的初始化，要调用了退出和进入才进行的
+
+     -- dismiss ---》 transferOut ---》 createTransferImage （初始化移动view的
+     相关信息，包括原来imageview的位置大小等）---》 transformThumbnail（调用移动
+     图片动画的方法，） ---》 transImage.transformOut --- 》invalidate方法，会调
+     用transferimage的ondraw方法 ---》 initTransform（初始化）
+
+     -- 
+     */
     public static final int STATE_TRANS_NORMAL = 0; // 普通状态
     public static final int STATE_TRANS_IN = 1; // 从缩略图到大图状态
     public static final int STATE_TRANS_OUT = 2; // 从大图到缩略图状态
@@ -309,7 +335,7 @@ public class TransferImage extends PhotoView {
 
         if (state != STATE_TRANS_NORMAL) { //非普通状态
             if (transformStart) { //动画开始
-                initTransform();
+                initTransform(); //初始化view的位置、缩放等相关信息
             }
             if (transform == null) {
                 super.onDraw(canvas);
