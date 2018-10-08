@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+
+    <declare-styleable name="RoundProgressBar">
+        <attr name="roundColor" format="color" />
+        <attr name="roundProgressColor" format="color" />
+        <attr name="roundWidth" format="dimension"/>
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="max" format="integer"/>
+        <attr name="textIsDisplayable" format="boolean"/>
+        <attr name="style">
+            <enum name="STROKE" value="0"/>
+            <enum name="FILL" value="1"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CheckBox">
+        <attr name="text" format="reference|string"/><!--单选/多选旁边的文本-->
+        <attr name="cTextColor" format="color|reference"/><!--文本颜色-->
+        <attr name="bgColor" format="color|reference"/><!--背景颜色-->
+        <attr name="cTextSize" format="dimension|reference"/><!--文本大小-->
+        <attr name="middlePadding" format="dimension|integer"/><!--单选/多选与文本之间的距离-->
+        <attr name="duration" format="integer"/><!--动画时长-->
+        <attr name="strokeWidth" format="dimension"/><!--选中时，勾的宽度以及未选中时描边的宽度-->
+        <attr name="colorTick" format="color|reference"/><!--选中时勾的颜色-->
+        <attr name="colorChecked" format="color|reference"/><!--选中时的背景色-->
+        <attr name="colorUnchecked" format="color|reference"/><!--未选中时的背景色-->
+        <attr name="colorUncheckedStroke" format="color|reference"/><!--未选中时,描边的颜色-->
+        <attr name="checkBoxWidth" format="dimension|integer"/><!--单选/多选框的宽度-->
+        <attr name="checkBoxHeight" format="dimension|integer"/><!--单选/多选框的高度-->
+
+        <attr name="shape" format="enum"><!--CheckView形状-->
+            <enum name="circle" value="0"/><!--圆形-->
+            <enum name="square" value="1"/><!--正方形-->
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="NineGridImageView">
+        <attr name="singleImgSize" format="dimension" />
+        <attr name="imgGap" format="dimension" />
+        <attr name="maxSize" format="integer" />
+        <attr name="showStyle" format="enum">
+            <enum name="grid" value="0" />
+            <enum name="fill" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <attr name="image_gallery_span_count" format="integer" />
+    <attr name="image_gallery_select_shade" format="color" />
+
+    <declare-styleable name="IMGColorRadio" tools:ignore="ResourceName">
+
+        <attr name="image_color" format="color" />
+        <attr name="image_stroke_color" format="color" />
+
+    </declare-styleable>
+
+    <declare-styleable name="CircleIndicator">
+        <attr name="ci_width" format="dimension"/>
+        <attr name="ci_height" format="dimension"/>
+        <attr name="ci_margin" format="dimension"/>
+        <attr name="ci_orientation" format="enum">
+            <!-- Defines an horizontal widget. -->
+            <enum name="horizontal" value="0"/>
+            <!-- Defines a vertical widget. -->
+            <enum name="vertical" value="1"/>
+        </attr>
+
+        <attr name="ci_gravity">
+            <!-- Push object to the top of its container, not changing its size. -->
+            <flag name="top" value="0x30"/>
+            <!-- Push object to the bottom of its container, not changing its size. -->
+            <flag name="bottom" value="0x50"/>
+            <!-- Push object to the left of its container, not changing its size. -->
+            <flag name="left" value="0x03"/>
+            <!-- Push object to the right of its container, not changing its size. -->
+            <flag name="right" value="0x05"/>
+            <!-- Place object in the vertical center of its container, not changing its size. -->
+            <flag name="center_vertical" value="0x10"/>
+            <!-- Grow the vertical size of the object if needed so it completely fills its container. -->
+            <flag name="fill_vertical" value="0x70"/>
+            <!-- Place object in the horizontal center of its container, not changing its size. -->
+            <flag name="center_horizontal" value="0x01"/>
+            <!-- Grow the horizontal size of the object if needed so it completely fills its container. -->
+            <flag name="fill_horizontal" value="0x07"/>
+            <!-- Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. -->
+            <flag name="center" value="0x11"/>
+            <!-- Grow the horizontal and vertical size of the object if needed so it completely fills its container. -->
+            <flag name="fill" value="0x77"/>
+            <!-- Additional option that can be set to have the top and/or bottom edges of
+            the child clipped to its container's bounds.
+            The clip will be based on the vertical gravity: a top gravity will clip the bottom
+            edge, a bottom gravity will clip the top edge, and neither will clip both edges. -->
+            <flag name="clip_vertical" value="0x80"/>
+            <!-- Additional option that can be set to have the left and/or right edges of
+            the child clipped to its container's bounds.
+            The clip will be based on the horizontal gravity: a left gravity will clip the right
+            edge, a right gravity will clip the left edge, and neither will clip both edges. -->
+            <flag name="clip_horizontal" value="0x08"/>
+            <!-- Push object to the beginning of its container, not changing its size. -->
+            <flag name="start" value="0x00800003"/>
+            <!-- Push object to the end of its container, not changing its size. -->
+            <flag name="end" value="0x00800005"/>
+        </attr>
+
+    </declare-styleable>
+</resources>

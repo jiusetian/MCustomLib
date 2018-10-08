@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <include layout="@layout/toolbar_layout"/>
+
+    <com.lib_photo.Picker.weidget.CustomViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"/>
+
+
+    <RelativeLayout
+        android:id="@+id/rll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:layout_gravity="bottom"
+        android:background="#B3000000"
+        android:minHeight="48dp"
+        android:paddingLeft="@dimen/layout_padding_16dp"
+        android:paddingRight="@dimen/layout_padding_16dp">
+
+        <TextView
+            android:id="@+id/edit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="编辑"
+            android:padding="10dp"
+            android:layout_marginLeft="-10dp"
+            android:textColor="@color/image_color_red"
+            android:textSize="16sp"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:checked="false"
+            android:text="@string/image_size"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"/>
+
+        <com.lib_photo.Picker.weidget.CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:checkBoxHeight="20dp"
+            app:checkBoxWidth="20dp"
+            app:strokeWidth="0.5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:colorUncheckedStroke="@android:color/white"
+            app:text="选择"
+            app:cTextColor="@android:color/holo_red_light"
+            app:middlePadding="@dimen/layout_margin_5dp"
+            android:paddingTop="@dimen/layout_margin_5dp"
+            android:paddingBottom="@dimen/layout_margin_5dp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>
