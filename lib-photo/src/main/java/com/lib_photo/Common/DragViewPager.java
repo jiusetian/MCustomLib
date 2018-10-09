@@ -31,6 +31,10 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
     private float mDownY;
     private float screenHeight;
 
+    private float scale;
+    private float alpha;
+
+
     /**
      * 要缩放的View
      */
@@ -86,21 +90,21 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-            switch (ev.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mDownX = ev.getRawX();
-                    mDownY = ev.getRawY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    int deltaX = Math.abs((int) (ev.getRawX() - mDownX));
-                    int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
-                    //在Y轴方向滑动的距离大于某个值而且大于X轴方向的距离就算有效的下拉动作
-                    if (deltaY > DRAG_GAP_PX && deltaY > deltaX) {
-                        return true;
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    break;
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mDownX = ev.getRawX();
+                mDownY = ev.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int deltaX = Math.abs((int) (ev.getRawX() - mDownX));
+                int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
+                //在Y轴方向滑动的距离大于某个值而且大于X轴方向的距离就算有效的下拉动作
+                if (deltaY > DRAG_GAP_PX && deltaY > deltaX) {
+                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
         }
         return super.onInterceptTouchEvent(ev);
     }
@@ -138,7 +142,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                 if (vY >= 1200 || Math.abs(mUpY - mDownY) > screenHeight / 6) {
                     //下滑速度快，或者下滑距离超过屏幕高度的指定值，就关闭
                     if (iAnimClose != null) {
-                        iAnimClose.onPictureRelease(currentShowView);
+                        iAnimClose.onPictureRelease(currentShowView, this.scale, this.alpha);
                     }
                 } else {
                     resetReviewState(mUpX, mUpY);
@@ -207,6 +211,8 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
         scale = 1 - Math.abs(deltaY) / screenHeight;
         alphaPercent = 1 - Math.abs(deltaY) / (screenHeight / 2);
         //}
+        this.scale = scale;
+        this.alpha = alphaPercent;
         //移动view
         ViewHelper.setTranslationX(currentShowView, deltaX);
         ViewHelper.setTranslationY(currentShowView, deltaY);
@@ -265,7 +271,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
     public interface IAnimClose {
         void onPictureClick();
 
-        void onPictureRelease(View view);
+        void onPictureRelease(View view, float scale, float alpha);
     }
 
 

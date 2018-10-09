@@ -124,6 +124,7 @@ public class UniversalNormalActivity extends BaseActivity {
                 .setProgressIndicator(new ProgressPieIndicator())
                 .setIndexIndicator(new NumberIndexIndicator(true))
                 .setJustLoadHitImage(true)
+                .setDuration(3000)
                 .setListView(gvImages)
                 .setImageId(R.id.image_view)
                 .setOnLongClcikListener(new Transferee.OnTransfereeLongClickListener() {

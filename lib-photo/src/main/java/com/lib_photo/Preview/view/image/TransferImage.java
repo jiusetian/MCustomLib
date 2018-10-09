@@ -106,8 +106,10 @@ public class TransferImage extends PhotoView {
      * @param alpha     透明度
      */
     public void setEndInfo(int locationX, int locationY, float scale, float alpha) {
-        if (transfromEnd == null)
+        if (transfromEnd == null) {
             transfromEnd = new Transfrom();
+            transfromEnd.rect = new LocationSizeF();
+        }
         transfromEnd.rect.left = locationX;
         transfromEnd.rect.top = locationY;
         transfromEnd.endScale = scale;
