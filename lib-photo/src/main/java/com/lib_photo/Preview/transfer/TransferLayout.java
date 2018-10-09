@@ -32,6 +32,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  * email: 196425254@qq.com
  */
 class TransferLayout extends FrameLayout {
+    private String TAG="tag";
     private Context context;
 
     private TransferImage transImage;

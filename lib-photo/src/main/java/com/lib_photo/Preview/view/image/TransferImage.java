@@ -59,7 +59,7 @@ public class TransferImage extends PhotoView {
     private Paint paint;
     private Matrix transMatrix; //可用于缩放和平移
 
-    private Transfrom transform;
+    private Transfrom transform; //保存图片相关信息
     private OnTransferListener transformListener;
 
     public TransferImage(Context context) {
@@ -93,6 +93,26 @@ public class TransferImage extends PhotoView {
         originalLocationY = locationY;
         originalWidth = width;
         originalHeight = height;
+    }
+
+    Transfrom transfromEnd; //后面有改变的信息
+
+    /**
+     * 设置图片移动后的相关信息变化
+     *
+     * @param locationX
+     * @param locationY
+     * @param scale
+     * @param alpha     透明度
+     */
+    public void setEndInfo(int locationX, int locationY, float scale, float alpha) {
+        if (transfromEnd == null)
+            transfromEnd = new Transfrom();
+        transfromEnd.rect.left = locationX;
+        transfromEnd.rect.top = locationY;
+        transfromEnd.endScale = scale;
+        transfromEnd.trandAlpha = alpha;
+
     }
 
     /**
@@ -175,7 +195,6 @@ public class TransferImage extends PhotoView {
         cate = CATE_ANIMA_TOGETHER; //动画一起执行
         state = STATE_TRANS_OUT; //退出状态
         transformStart = true; //开始
-
         paint.setAlpha(255); //不透明
         invalidate(); //重绘
     }
@@ -262,8 +281,8 @@ public class TransferImage extends PhotoView {
         float xEScale = getWidth() / ((float) transDrawable.getIntrinsicWidth());
         float yEScale = getHeight() / ((float) transDrawable.getIntrinsicHeight());
         float endScale = xEScale < yEScale ? xEScale : yEScale; //取小的那个
-
-        Log.d(TAG, "initTransform: 初始缩放值="+startScale+"结束缩放值="+endScale);
+        if (transfromEnd != null) endScale = endScale * transfromEnd.scale;
+        Log.d(TAG, "initTransform: 初始缩放值=" + startScale + "结束缩放值=" + endScale);
         if (cate == CATE_ANIMA_APART && stage == STAGE_TRANSLATE) { // 平移阶段的动画，不缩放
             transform.endScale = startScale;
         } else {
@@ -287,8 +306,8 @@ public class TransferImage extends PhotoView {
         transform.endRect = new LocationSizeF();
         float bitmapEndWidth = transDrawable.getIntrinsicWidth() * transform.endScale;// 图片最终的宽度
         float bitmapEndHeight = transDrawable.getIntrinsicHeight() * transform.endScale;// 图片最终的高度
-        transform.endRect.left = (getWidth() - bitmapEndWidth) / 2;
-        transform.endRect.top = (getHeight() - bitmapEndHeight) / 2;
+        transform.endRect.left = transfromEnd == null ? (getWidth() - bitmapEndWidth) / 2 : transfromEnd.rect.left;
+        transform.endRect.top = transfromEnd == null ? (getHeight() - bitmapEndHeight) / 2 : transfromEnd.rect.top;
         transform.endRect.width = bitmapEndWidth;
         transform.endRect.height = bitmapEndHeight;
 
@@ -499,6 +518,7 @@ public class TransferImage extends PhotoView {
         float startScale;// 图片开始的缩放值
         float endScale;// 图片结束的缩放值
         float scale;// 属性ValueAnimator计算出来的值
+        float trandAlpha; //透明度
         LocationSizeF startRect;// 开始的区域
         LocationSizeF endRect;// 结束的区域
         LocationSizeF rect;// 属性ValueAnimator计算出来的值

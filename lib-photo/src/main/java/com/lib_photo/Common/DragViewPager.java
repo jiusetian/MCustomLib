@@ -13,6 +13,7 @@ import com.nineoldandroids.view.ViewHelper;
 
 
 public class DragViewPager extends ViewPager implements View.OnClickListener {
+
     public static final int STATUS_NORMAL = 0;//正常浏览状态
     public static final int STATUS_MOVING = 1;//滑动状态
     public static final int STATUS_RESETTING = 2;//返回中状态
