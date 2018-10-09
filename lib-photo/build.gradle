@@ -60,4 +60,5 @@ dependencies {
 
     implementation 'com.github.filippudak.progresspieview:library:1.0.4'
     api 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.nineoldandroids:library:2.4.0'
 }

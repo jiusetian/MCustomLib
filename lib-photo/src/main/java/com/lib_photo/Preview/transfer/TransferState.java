@@ -96,7 +96,7 @@ abstract class TransferState {
         //设置动画view的初始位置
         transImage.setOriginalInfo(location[0], getTransImageLocalY(location[1]),
                 originImage.getWidth(), originImage.getHeight());
-        transImage.setBackgroundColor(config.getBackgroundColor());
+        //transImage.setBackgroundColor(config.getBackgroundColor());
         transImage.setDuration(config.getDuration());
         transImage.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
         transImage.setOnTransferListener(transfer.getTransListener()); //转移监听

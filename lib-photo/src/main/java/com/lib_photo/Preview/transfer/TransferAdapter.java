@@ -21,7 +21,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  * email: 196425254@qq.com
  */
 class TransferAdapter extends PagerAdapter {
-
+    private String TAG="tag";
     private TransferLayout transfer;
     private int showIndex; //主要用来
     private int imageSize;
@@ -110,11 +110,10 @@ class TransferAdapter extends PagerAdapter {
     private FrameLayout newParentLayout(ViewGroup container, final int pos) {
         Context context = container.getContext();
         TransferConfig config = transfer.getTransConfig();
-
         // create inner ImageView
         TransferImage imageView = new TransferImage(context);
         imageView.setDuration(config.getDuration());
-        imageView.setBackgroundColor(config.getBackgroundColor());
+        //imageView.setBackgroundColor(config.getBackgroundColor());
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
 

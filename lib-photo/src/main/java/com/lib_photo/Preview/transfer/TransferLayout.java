@@ -6,13 +6,13 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.lib_photo.Common.DragViewPager;
 import com.lib_photo.Preview.style.IIndexIndicator;
 import com.lib_photo.Preview.view.image.TransferImage;
 import com.lib_photo.Preview.view.indicator.ExView;
@@ -20,7 +20,6 @@ import com.lib_photo.Preview.view.indicator.ExView;
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.content.ContentValues.TAG;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /**
@@ -36,7 +35,7 @@ class TransferLayout extends FrameLayout {
     private Context context;
 
     private TransferImage transImage;
-    private ViewPager transViewPager;
+    private DragViewPager transViewPager;
     private TransferAdapter transAdapter;
     private TransferConfig transConfig;
 
@@ -49,9 +48,8 @@ class TransferLayout extends FrameLayout {
     private ViewPager.OnPageChangeListener transChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            Log.d(TAG, "onPageSelected: 被选中pager的位置=" + position);
             transConfig.setNowThumbnailIndex(position); //设置当前显示页面位置
-
+            transViewPager.setCurrentShowView(transAdapter.getImageItem(position));
             if (transConfig.isJustLoadHitImage()) { //只加载被选中的那个页面
                 loadSourceImageOffset(position, 0);
             } else { //不是的话，就提前加载指定的左右两边的图片，默认是左右两边各一张
@@ -70,7 +68,9 @@ class TransferLayout extends FrameLayout {
             transViewPager.addOnPageChangeListener(transChangeListener); //添加pager改变的监听
 
             int position = transConfig.getNowThumbnailIndex();
-            if (transConfig.isJustLoadHitImage()) { //是否需要提前加载左右两边的图片
+            transChangeListener.onPageSelected(position);
+
+            if (transConfig.isJustLoadHitImage()) {
                 loadSourceImageOffset(position, 0);
             } else {
                 loadSourceImageOffset(position, 1);
@@ -124,7 +124,6 @@ class TransferLayout extends FrameLayout {
      */
     TransferLayout(Context context) {
         super(context);
-
         this.context = context;
         this.loadedIndexSet = new HashSet<>();
     }
@@ -182,13 +181,12 @@ class TransferLayout extends FrameLayout {
                 transConfig.getNowThumbnailIndex());
         transAdapter.setOnInstantListener(instantListener); //初始化完成的监听
 
-        transViewPager = new ViewPager(context);
+        transViewPager = new DragViewPager(context);
         // 先隐藏，待 ViewPager 下标为 config.getCurrOriginIndex() 的页面创建完毕再显示
         transViewPager.setVisibility(View.INVISIBLE);
         transViewPager.setOffscreenPageLimit(transConfig.getOffscreenPageLimit());
         transViewPager.setAdapter(transAdapter);
         transViewPager.setCurrentItem(transConfig.getNowThumbnailIndex());
-
         addView(transViewPager, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
     }
 
