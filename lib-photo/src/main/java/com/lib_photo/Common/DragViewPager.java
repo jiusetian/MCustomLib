@@ -29,6 +29,8 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
 
     private float mDownX;
     private float mDownY;
+    private float vDeltaX;  //代表图片移动距离
+    private float vDeltaY;
     private float screenHeight;
 
     private float scale;
@@ -137,12 +139,14 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                     return super.onTouchEvent(ev);
                 final float mUpX = ev.getRawX();
                 final float mUpY = ev.getRawY();
-
+                //手势放开的时候图片移动距离
+                vDeltaX = mUpX - mDownX;
+                vDeltaY = mUpY - mDownY;
                 float vY = computeYVelocity();//松开时必须释放VelocityTracker资源
                 if (vY >= 1200 || Math.abs(mUpY - mDownY) > screenHeight / 6) {
                     //下滑速度快，或者下滑距离超过屏幕高度的指定值，就关闭
                     if (iAnimClose != null) {
-                        iAnimClose.onPictureRelease(currentShowView, this.scale, this.alpha);
+                        iAnimClose.onPictureRelease(currentShowView, vDeltaX, vDeltaY, this.scale, this.alpha);
                     }
                 } else {
                     resetReviewState(mUpX, mUpY);
@@ -271,7 +275,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
     public interface IAnimClose {
         void onPictureClick();
 
-        void onPictureRelease(View view, float scale, float alpha);
+        void onPictureRelease(View view, float detalX, float detalY, float scale, float alpha);
     }
 
 

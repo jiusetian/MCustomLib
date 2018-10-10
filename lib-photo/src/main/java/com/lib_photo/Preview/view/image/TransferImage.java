@@ -12,10 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * TransferImage 主要功能：<br/>
@@ -95,25 +92,25 @@ public class TransferImage extends PhotoView {
         originalHeight = height;
     }
 
-    Transfrom transfromEnd; //后面有改变的信息
+    Transfrom transfromChange; //后面有改变的信息
 
     /**
      * 设置图片移动后的相关信息变化
      *
-     * @param locationX
-     * @param locationY
+     * @param detalX
+     * @param detalY
      * @param scale
-     * @param alpha     透明度
+     * @param alpha  透明度
      */
-    public void setEndInfo(int locationX, int locationY, float scale, float alpha) {
-        if (transfromEnd == null) {
-            transfromEnd = new Transfrom();
-            transfromEnd.rect = new LocationSizeF();
+    public void setChangeInfo(float detalX, float detalY, float scale, float alpha) {
+        if (transfromChange == null) {
+            transfromChange = new Transfrom();
+            transfromChange.rect = new LocationSizeF();
         }
-        transfromEnd.rect.left = locationX;
-        transfromEnd.rect.top = locationY;
-        transfromEnd.endScale = scale;
-        transfromEnd.trandAlpha = alpha;
+        transfromChange.rect.left = detalX; //X轴移动距离
+        transfromChange.rect.top = detalY; //Y轴移动距离
+        transfromChange.endScale = scale;
+        transfromChange.trandAlpha = alpha < 0 ? 0 : alpha;
 
     }
 
@@ -268,7 +265,7 @@ public class TransferImage extends PhotoView {
         Drawable transDrawable = getDrawable(); //获取对应的drawable，为了获取图片的原始长宽
         if (transDrawable == null) return;
         if (getWidth() == 0 || getHeight() == 0) return;
-
+        if (transfromChange != null) paint.setAlpha((int) (255 * transfromChange.trandAlpha));
         transform = new Transfrom();
 
         /** 下面为缩放的计算 */
@@ -283,8 +280,9 @@ public class TransferImage extends PhotoView {
         float xEScale = getWidth() / ((float) transDrawable.getIntrinsicWidth());
         float yEScale = getHeight() / ((float) transDrawable.getIntrinsicHeight());
         float endScale = xEScale < yEScale ? xEScale : yEScale; //取小的那个
-        if (transfromEnd != null) endScale = endScale * transfromEnd.scale;
-        Log.d(TAG, "initTransform: 初始缩放值=" + startScale + "结束缩放值=" + endScale);
+        if (transfromChange != null) {
+            endScale = endScale * transfromChange.endScale;
+        }
         if (cate == CATE_ANIMA_APART && stage == STAGE_TRANSLATE) { // 平移阶段的动画，不缩放
             transform.endScale = startScale;
         } else {
@@ -308,8 +306,8 @@ public class TransferImage extends PhotoView {
         transform.endRect = new LocationSizeF();
         float bitmapEndWidth = transDrawable.getIntrinsicWidth() * transform.endScale;// 图片最终的宽度
         float bitmapEndHeight = transDrawable.getIntrinsicHeight() * transform.endScale;// 图片最终的高度
-        transform.endRect.left = transfromEnd == null ? (getWidth() - bitmapEndWidth) / 2 : transfromEnd.rect.left;
-        transform.endRect.top = transfromEnd == null ? (getHeight() - bitmapEndHeight) / 2 : transfromEnd.rect.top;
+        transform.endRect.left = transfromChange == null ? (getWidth() - bitmapEndWidth) / 2 : (getWidth() - bitmapEndWidth) / 2 + transfromChange.rect.left;
+        transform.endRect.top = transfromChange == null ? (getHeight() - bitmapEndHeight) / 2 : (getHeight() - bitmapEndHeight) / 2 + transfromChange.rect.top;
         transform.endRect.width = bitmapEndWidth;
         transform.endRect.height = bitmapEndHeight;
 
@@ -470,7 +468,8 @@ public class TransferImage extends PhotoView {
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public synchronized void onAnimationUpdate(ValueAnimator animation) {
-                paint.setAlpha((int) (255 * animation.getAnimatedFraction()));
+                paint.setAlpha(transfromChange == null ? (int) (255 * animation.getAnimatedFraction()) :
+                        (int) ((255 * animation.getAnimatedFraction()) * transfromChange.trandAlpha));
                 transform.scale = (Float) animation.getAnimatedValue("scale");
                 transform.rect.left = (Float) animation.getAnimatedValue("left");
                 transform.rect.top = (Float) animation.getAnimatedValue("top");

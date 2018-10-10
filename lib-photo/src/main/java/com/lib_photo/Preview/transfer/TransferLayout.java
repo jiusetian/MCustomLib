@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.lib_photo.Preview.style.IIndexIndicator;
 import com.lib_photo.Preview.view.image.TransferImage;
 import com.lib_photo.Preview.view.indicator.ExView;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -197,8 +195,8 @@ class TransferLayout extends FrameLayout {
             }
 
             @Override
-            public void onPictureRelease(View view, float scale, float alpha) {
-                dismiss(transConfig.getNowThumbnailIndex(), view, scale, alpha);
+            public void onPictureRelease(View view, float detalX, float detalY, float scale, float alpha) {
+                dismiss(transConfig.getNowThumbnailIndex(), view, detalX, detalY, scale, alpha);
             }
         });
         addView(transViewPager, new LayoutParams(MATCH_PARENT, MATCH_PARENT));
@@ -295,64 +293,18 @@ class TransferLayout extends FrameLayout {
             });
     }
 
-    /**
-     * 由于 4.4 以下版本状态栏不可修改，所以兼容 4.4 以下版本的全屏模式时，要去除状态栏的高度
-     *
-     * @param oldY
-     * @return
-     */
-    protected int getTransImageLocalY(int oldY) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-            return oldY;
-        }
-        return oldY - getStatusBarHeight();
-    }
 
-    /**
-     * 获取状态栏高度
-     *
-     * @return 状态栏高度
-     */
-    protected int getStatusBarHeight() {
-        try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object object = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = (Integer) field.get(object);
-            return context.getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-
-    /**
-     * 获取 View 在屏幕坐标系中的坐标
-     *
-     * @param view 需要定位位置的 View
-     * @return 坐标系数组
-     */
-    protected int[] getViewLocation(View view) {
-        int[] location = new int[2];
-        view.getLocationInWindow(location);
-        return location;
-    }
-
-    public void dismiss(int pos, View view, float scale, float alpha) {
-        if (transImage != null && transImage.getState()
-                == TransferImage.STATE_TRANS_OUT) // 防止双击
+    public void dismiss(int pos, View view, float detalX, float detalY, float scale, float alpha) {
+        if (transImage != null && transImage.getState() == TransferImage.STATE_TRANS_OUT) // 防止双击
             return;
-
         transImage = getTransferState(pos).transferOut(pos);
-
         //设置移动过的view信息
-        int[] location = getViewLocation(view);
-        transImage.setEndInfo(location[0], getTransImageLocalY(location[1]), scale, alpha);
         //==null代表当前退出的图片打开之前是没有在界面有显示的
         if (transImage == null)
-            diffusionTransfer(pos);
+            diffusionTransfer(pos, scale);
         else
             transViewPager.setVisibility(View.INVISIBLE); //viewpager进行隐藏
-
+        transImage.setChangeInfo(detalX, detalY, scale, alpha);
         hideIndexIndicator();
     }
 
@@ -370,7 +322,7 @@ class TransferLayout extends FrameLayout {
 
         //==null代表当前退出的图片打开之前是没有在界面有显示的
         if (transImage == null)
-            diffusionTransfer(pos);
+            diffusionTransfer(pos, 1);
         else
             transViewPager.setVisibility(View.INVISIBLE); //viewpager进行隐藏
 
@@ -383,7 +335,7 @@ class TransferLayout extends FrameLayout {
      *
      * @param pos 动画作用于 pos 索引位置的图片
      */
-    private void diffusionTransfer(int pos) {
+    private void diffusionTransfer(int pos, float startScale) {
         transImage = transAdapter.getImageItem(pos);
         transImage.setState(TransferImage.STATE_TRANS_OUT);
         transImage.disenable();
@@ -393,7 +345,7 @@ class TransferLayout extends FrameLayout {
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         PropertyValuesHolder alphaHolder = PropertyValuesHolder.ofFloat("alpha", 1, 0);
-        PropertyValuesHolder scaleXHolder = PropertyValuesHolder.ofFloat("scaleX", 1, 1.2f);
+        PropertyValuesHolder scaleXHolder = PropertyValuesHolder.ofFloat("scaleX", 1 * startScale, 1.2f * startScale);
         valueAnimator.setValues(alphaHolder, scaleXHolder);
 
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
