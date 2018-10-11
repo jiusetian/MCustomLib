@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -89,23 +90,38 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
         }
     }
 
+    private boolean isPointer = false; //是否多点触控了
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
+        switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "onInterceptTouchEvent: 拦截down事件=" + ev.getPointerCount());
                 mDownX = ev.getRawX();
                 mDownY = ev.getRawY();
                 break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+                Log.d(TAG, "onInterceptTouchEvent: 第二个触控点");
+                isPointer = true;
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+                Log.d(TAG, "onInterceptTouchEvent: 第二个触控点拿起");
+                break;
             case MotionEvent.ACTION_MOVE:
+                Log.d(TAG, "onInterceptTouchEvent: 拦截移动事件=" + ev.getPointerCount());
                 int deltaX = Math.abs((int) (ev.getRawX() - mDownX));
                 int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
                 //在Y轴方向滑动的距离大于某个值而且大于X轴方向的距离就算有效的下拉动作
-                if (deltaY > DRAG_GAP_PX && deltaY > deltaX) {
+                if (deltaY > DRAG_GAP_PX && deltaY > deltaX && !isPointer) {
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                isPointer = false;
+                Log.d(TAG, "onInterceptTouchEvent: 调用了拦截的up");
                 break;
         }
         return super.onInterceptTouchEvent(ev);
@@ -117,18 +133,21 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
             return false;
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "onTouchEvent: 执行了down");
                 mDownX = ev.getRawX();
                 mDownY = ev.getRawY();
                 addIntoVelocity(ev); //加入滑动速度检测
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.d(TAG, "onTouchEvent: 按下的手指数=" + ev.getPointerCount());
                 addIntoVelocity(ev);
                 int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
                 //滑动距离少于阈值
                 if (deltaY <= DRAG_GAP_PX && currentStatus != STATUS_MOVING)
                     return super.onTouchEvent(ev);
                 //viewpager不在切换中，并且手指往下滑动，开始缩放
-                if (currentPageStatus != SCROLL_STATE_DRAGGING && (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING)) {
+                if (currentPageStatus != SCROLL_STATE_DRAGGING &&
+                        (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING)) {
                     moveView(ev.getRawX(), ev.getRawY());
                     return true;
                 }
@@ -206,6 +225,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
         if (currentShowView == null)
             return;
         currentStatus = STATUS_MOVING;
+        Log.d(TAG, "moveView: 进行了移动");
         //移动的距离
         float deltaX = movingX - mDownX;
         float deltaY = movingY - mDownY;
