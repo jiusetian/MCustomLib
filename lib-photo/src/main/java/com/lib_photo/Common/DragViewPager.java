@@ -90,7 +90,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
         }
     }
 
-    private boolean isPointer = false; //是否多点触控了
+    private boolean hasPointers = false; //是否多点触控了
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -103,7 +103,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 Log.d(TAG, "onInterceptTouchEvent: 第二个触控点");
-                isPointer = true;
+                hasPointers = true;
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
@@ -114,13 +114,13 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                 int deltaX = Math.abs((int) (ev.getRawX() - mDownX));
                 int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
                 //在Y轴方向滑动的距离大于某个值而且大于X轴方向的距离就算有效的下拉动作
-                if (deltaY > DRAG_GAP_PX && deltaY > deltaX && !isPointer) {
+                if (deltaY > DRAG_GAP_PX && deltaY > deltaX && !hasPointers) {
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                isPointer = false;
+                hasPointers = false;
                 Log.d(TAG, "onInterceptTouchEvent: 调用了拦截的up");
                 break;
         }
