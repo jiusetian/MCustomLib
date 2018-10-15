@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 
+import com.lib_photo.Preview.view.image.PhotoView;
 import com.nineoldandroids.view.ViewHelper;
 
 
@@ -96,32 +97,28 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "onInterceptTouchEvent: 拦截down事件=" + ev.getPointerCount());
                 mDownX = ev.getRawX();
                 mDownY = ev.getRawY();
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
-                Log.d(TAG, "onInterceptTouchEvent: 第二个触控点");
                 hasPointers = true;
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
-                Log.d(TAG, "onInterceptTouchEvent: 第二个触控点拿起");
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.d(TAG, "onInterceptTouchEvent: 拦截移动事件=" + ev.getPointerCount());
                 int deltaX = Math.abs((int) (ev.getRawX() - mDownX));
                 int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
-                //在Y轴方向滑动的距离大于某个值而且大于X轴方向的距离就算有效的下拉动作
-                if (deltaY > DRAG_GAP_PX && deltaY > deltaX && !hasPointers) {
+                //在Y轴方向滑动的距离大于某个值而且大于X轴方向的距离就算有效的下拉动作,在图片缩放变大的时候，不拦截
+                if (deltaY > DRAG_GAP_PX && deltaY > deltaX && !hasPointers && !((PhotoView) currentShowView).isZoonUp()) {
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 hasPointers = false;
-                Log.d(TAG, "onInterceptTouchEvent: 调用了拦截的up");
                 break;
         }
         return super.onInterceptTouchEvent(ev);
@@ -139,7 +136,6 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                 addIntoVelocity(ev); //加入滑动速度检测
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.d(TAG, "onTouchEvent: 按下的手指数=" + ev.getPointerCount());
                 addIntoVelocity(ev);
                 int deltaY = Math.abs((int) (ev.getRawY() - mDownY));
                 //滑动距离少于阈值

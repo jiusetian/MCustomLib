@@ -20,7 +20,7 @@ import android.widget.OverScroller;
 import android.widget.Scroller;
 
 public class PhotoView extends android.support.v7.widget.AppCompatImageView {
-
+    private String TAG=getClass().getSimpleName();
     private final static int MIN_ROTATE = 35;
     private final static int ANIMA_DURING = 340;
     private final static float MAX_SCALE = 2.5f;
@@ -708,6 +708,14 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView {
 
         }
     };
+
+    /**
+     *  是否进行了缩放
+     * @return
+     */
+    public boolean isZoonUp(){
+        return isZoonUp;
+    }
 
     private float resistanceScrollByX(float overScroll, float detalX) {
         float s = detalX * (Math.abs(Math.abs(overScroll) - MAX_OVER_RESISTANCE) / (float) MAX_OVER_RESISTANCE);
