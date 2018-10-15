@@ -10,6 +10,7 @@ import com.lib_photo.Picker.controller.PhotoPickConfig;
 
 public class MainActivity extends AppCompatActivity {
     String TAG="tag";
+    //测试分支代码提交
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
