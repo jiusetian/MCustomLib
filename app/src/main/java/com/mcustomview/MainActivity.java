@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_preview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,UniversalNormalActivity.class));
+                startActivity(new Intent(MainActivity.this,UniversalNoThumActivity.class));
             }
         });
     }

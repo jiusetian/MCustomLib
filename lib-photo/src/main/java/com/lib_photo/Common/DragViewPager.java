@@ -61,6 +61,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
     public DragViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+        PhotoView photoView = new PhotoView(context);
     }
 
     public void init(Context context) {
@@ -96,6 +97,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getActionMasked()) {
+
             case MotionEvent.ACTION_DOWN:
                 mDownX = ev.getRawX();
                 mDownY = ev.getRawY();

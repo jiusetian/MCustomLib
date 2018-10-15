@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.lib_photo.Common.DragViewPager;
+import com.lib_photo.Preview.style.IExViewListener;
 import com.lib_photo.Preview.style.IIndexIndicator;
 import com.lib_photo.Preview.view.image.TransferImage;
 import com.lib_photo.Preview.view.indicator.ExView;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static com.lib_photo.Common.DragViewPager.STATUS_NORMAL;
 
 /**
  * Transferee 中 Dialog 显示的内容
@@ -103,6 +105,7 @@ class TransferLayout extends FrameLayout {
                         if (stage == TransferImage.STAGE_TRANSLATE) {
                             // 第一阶段位移动画执行完毕
                             addIndexIndicator();
+                            addExView(); //添加小图标
                             transViewPager.setVisibility(View.VISIBLE);
                             removeFromParent(transImage);
                         }
@@ -193,13 +196,10 @@ class TransferLayout extends FrameLayout {
             public void onPictureClick() {
             }
 
-            /**
-             * 状态回调
-             * @param status
-             */
+            //状态回调
             @Override
             public void onPictureStatus(int status) {
-
+                visibleTinyView(status);
             }
 
             @Override
@@ -435,6 +435,27 @@ class TransferLayout extends FrameLayout {
         IIndexIndicator indexIndicator = transConfig.getIndexIndicator();
         if (indexIndicator != null && transConfig.getSourceImageList().size() >= 2) {
             indexIndicator.onHide();
+        }
+    }
+
+    /**
+     * 隐藏或显示挂载小view
+     * @param viewStatus
+     */
+    private void visibleTinyView(int viewStatus) {
+        IIndexIndicator indexIndicator = transConfig.getIndexIndicator();
+        IExViewListener exView = transConfig.getExView();
+        if (indexIndicator != null) {
+            if (viewStatus == STATUS_NORMAL)
+                indexIndicator.onShow(transViewPager);
+            else
+                indexIndicator.onHide();
+        }
+        if (exView != null) {
+            if (viewStatus == STATUS_NORMAL)
+                exView.onShow(transViewPager);
+            else
+                exView.onHide();
         }
     }
 
