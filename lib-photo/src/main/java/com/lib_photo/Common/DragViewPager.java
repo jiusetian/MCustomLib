@@ -47,10 +47,10 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
      * 滑动速度检测类
      */
     private VelocityTracker mVelocityTracker;
-    private IAnimClose iAnimClose;
+    private IDragListener IDragListener;
 
-    public void setIAnimClose(IAnimClose iAnimClose) {
-        this.iAnimClose = iAnimClose;
+    public void setIAnimClose(IDragListener IDragListener) {
+        this.IDragListener = IDragListener;
     }
 
     public DragViewPager(Context context) {
@@ -160,8 +160,8 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                 float vY = computeYVelocity();//松开时必须释放VelocityTracker资源
                 if (vY >= 1200 || Math.abs(mUpY - mDownY) > screenHeight / 6) {
                     //下滑速度快，或者下滑距离超过屏幕高度的指定值，就关闭
-                    if (iAnimClose != null) {
-                        iAnimClose.onPictureRelease(currentShowView, vDeltaX, vDeltaY, this.scale, this.alpha);
+                    if (IDragListener != null) {
+                        IDragListener.onPictureRelease(currentShowView, vDeltaX, vDeltaY, this.scale, this.alpha);
                     }
                 } else {
                     resetReviewState(mUpX, mUpY);
@@ -189,6 +189,7 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                         mDownY = 0;
                         mDownX = 0;
                         currentStatus = STATUS_NORMAL;
+                        if (IDragListener!=null) IDragListener.onPictureStatus(STATUS_NORMAL);
                     }
                 }
             });
@@ -207,12 +208,13 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
                         mDownY = 0;
                         mDownX = 0;
                         currentStatus = STATUS_NORMAL;
+                        if (IDragListener!=null) IDragListener.onPictureStatus(STATUS_NORMAL);
                     }
                 }
             });
             valueAnimator.start();
-        } else if (iAnimClose != null)
-            iAnimClose.onPictureClick();
+        } else if (IDragListener != null)
+            IDragListener.onPictureClick();
     }
 
 
@@ -221,16 +223,17 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
         if (currentShowView == null)
             return;
         currentStatus = STATUS_MOVING;
+        if (IDragListener != null ) {
+            IDragListener.onPictureStatus(STATUS_MOVING);
+        }
         Log.d(TAG, "moveView: 进行了移动");
         //移动的距离
         float deltaX = movingX - mDownX;
         float deltaY = movingY - mDownY;
         float scale = 1f;
         float alphaPercent = 1f;
-        // if (deltaY > 0) {
         scale = 1 - Math.abs(deltaY) / screenHeight;
         alphaPercent = 1 - Math.abs(deltaY) / (screenHeight / 2);
-        //}
         this.scale = scale;
         this.alpha = alphaPercent;
         //移动view
@@ -282,14 +285,16 @@ public class DragViewPager extends ViewPager implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (iAnimClose != null) {
-            iAnimClose.onPictureClick();
+        if (IDragListener != null) {
+            IDragListener.onPictureClick();
         }
     }
 
 
-    public interface IAnimClose {
+    public interface IDragListener {
         void onPictureClick();
+
+        void onPictureStatus(int status);
 
         void onPictureRelease(View view, float detalX, float detalY, float scale, float alpha);
     }

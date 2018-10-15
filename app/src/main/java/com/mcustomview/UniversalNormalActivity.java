@@ -154,6 +154,7 @@ public class UniversalNormalActivity extends BaseActivity {
         @Override
         protected void convert(ViewHolder viewHolder, String item, final int position) {
             final ImageView imageView = viewHolder.getView(R.id.image_view);
+
             ImageLoader.getInstance().displayImage(item, imageView, options, new ImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {

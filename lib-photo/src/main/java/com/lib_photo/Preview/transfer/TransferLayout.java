@@ -188,9 +188,17 @@ class TransferLayout extends FrameLayout {
         transViewPager.setOffscreenPageLimit(transConfig.getOffscreenPageLimit());
         transViewPager.setAdapter(transAdapter);
         transViewPager.setCurrentItem(transConfig.getNowThumbnailIndex());
-        transViewPager.setIAnimClose(new DragViewPager.IAnimClose() {
+        transViewPager.setIAnimClose(new DragViewPager.IDragListener() {
             @Override
             public void onPictureClick() {
+            }
+
+            /**
+             * 状态回调
+             * @param status
+             */
+            @Override
+            public void onPictureStatus(int status) {
 
             }
 
