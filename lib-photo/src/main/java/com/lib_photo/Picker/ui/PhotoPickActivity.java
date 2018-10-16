@@ -22,10 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.lib_photo.R;
+import com.gyf.barlibrary.ImmersionBar;
 import com.lib_photo.Picker.BaseActivity;
 import com.lib_photo.Picker.PhotoGalleryAdapter;
-import com.lib_photo.Picker.PhotoPick;
 import com.lib_photo.Picker.PhotoPickAdapter;
 import com.lib_photo.Picker.bean.Photo;
 import com.lib_photo.Picker.bean.PhotoDirectory;
@@ -34,6 +33,7 @@ import com.lib_photo.Picker.controller.PhotoPickConfig;
 import com.lib_photo.Picker.controller.PhotoPreviewConfig;
 import com.lib_photo.Picker.loader.MediaStoreHelper;
 import com.lib_photo.Picker.utils.FileUtils;
+import com.lib_photo.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.yalantis.ucrop.UCrop;
 
@@ -79,6 +79,26 @@ public class PhotoPickActivity extends BaseActivity {
             return;
         }
 
+//        ImmersionBar.with(this)
+//                .titleBar(toolbar, false)
+//                .transparentBar()
+//                .init();
+
+//        ImmersionBar.with(this)
+//                .titleBar(toolbar, false)
+//                .transparentBar()
+//                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
+//                .navigationBarColorTransform(R.color.colorPrimary)
+//                .init();
+
+        ImmersionBar.with(this)
+                .titleBar(toolbar, false)
+                .transparentBar()
+                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
+                .navigationBarColorTransform(R.color.colorPrimary)
+                .barAlpha(0.1f)
+                .init();
+
         //申请权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             requestPermission();
@@ -91,7 +111,7 @@ public class PhotoPickActivity extends BaseActivity {
     private void init() {
         //设置ToolBar
         toolbar.setTitle(R.string.select_photo);
-        toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround()); //默认红色
+        //toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround()); //默认红色
 
         //全部相册照片列表
         RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.recyclerView);

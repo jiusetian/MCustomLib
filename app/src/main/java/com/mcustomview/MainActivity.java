@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         PhotoPick.init(this,R.color.image_color_red); //初始化
         setContentView(R.layout.activity_main);
 
+
         findViewById(R.id.btn_single).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_preview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,UniversalNoThumActivity.class));
+                startActivity(new Intent(MainActivity.this,UniversalNormalActivity.class));
             }
         });
     }

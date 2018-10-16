@@ -18,7 +18,8 @@
 
         <activity
             android:name=".Picker.ui.PhotoPickActivity"
-            android:theme="@style/PhoAppTheme.AppTheme"/>
+            android:theme="@style/PhoAppTheme.Transparent"
+            />
 
         <activity
             android:name=".Picker.ui.PhotoPreviewActivity"

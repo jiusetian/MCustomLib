@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.lib_photo.R;
 import com.lib_photo.Picker.bean.PhotoPickBean;
 import com.lib_photo.Picker.loader.ImageLoader;
 import com.lib_photo.Picker.loader.glide.GlideImageLoader;
 import com.lib_photo.Picker.ui.PhotoPickActivity;
+import com.lib_photo.R;
 
 
 /**

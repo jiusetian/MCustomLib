@@ -5,14 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <include layout="@layout/toolbar_layout"/>
-
     <com.lib_photo.Picker.weidget.CustomViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"/>
+        android:background="@android:color/black"
+        />
 
+    <include layout="@layout/toolbar_layout"/>
 
     <RelativeLayout
         android:id="@+id/rll_bottom"
