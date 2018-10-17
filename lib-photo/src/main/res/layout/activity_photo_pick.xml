@@ -1,17 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".Picker.ui.PhotoPickActivity"
     >
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <include
+                layout="@layout/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/icon_size_56dp"
+                app:layout_collapseMode="pin"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/toolbar_layout" />
+
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/slidingUpPanelLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
         android:gravity="bottom"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:umanoDragView="@+id/dragView"
         app:umanoOverlay="true"
         app:umanoPanelHeight="48dp"
@@ -24,13 +57,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="48dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +78,7 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/fresco_wait_color"/>
+                android:background="@color/fresco_wait_color" />
 
             <TextView
                 android:id="@+id/gallery"
@@ -56,16 +88,15 @@
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:text="@string/gallery"
                 android:paddingRight="5dp"
-                android:textSize="@dimen/text_size_16sp"/>
+                android:text="@string/gallery"
+                android:textSize="@dimen/text_size_16sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/gallery_rcl"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-    <include layout="@layout/toolbar_layout"/>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="PhoAppTheme.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="PhotoTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,17 +10,12 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="PhoAppTheme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
-        <!--<item name="android:windowNoTitle">true</item>-->
+    <style name="PhotoTheme.Transparent">
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
     </style>
 
-    <style name="BigImage.Theme.AppTheme" parent="PhoAppTheme.AppTheme">
+    <style name="PhotoTheme.BigImageTheme">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

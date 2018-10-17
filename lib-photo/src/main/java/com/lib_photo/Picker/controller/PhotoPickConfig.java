@@ -8,7 +8,6 @@ import com.lib_photo.Picker.bean.PhotoPickBean;
 import com.lib_photo.Picker.loader.ImageLoader;
 import com.lib_photo.Picker.loader.glide.GlideImageLoader;
 import com.lib_photo.Picker.ui.PhotoPickActivity;
-import com.lib_photo.R;
 
 
 /**
@@ -68,7 +67,7 @@ public class PhotoPickConfig {
         intent.putExtra(EXTRA_PICK_BUNDLE, bundle);
         intent.setClass(activity, PhotoPickActivity.class);
         activity.startActivityForResult(intent, requestCode);
-        activity.overridePendingTransition(R.anim.image_pager_enter_animation, 0);
+        //activity.overridePendingTransition(R.anim.image_pager_enter_animation, 0);
     }
 
     public static class Builder {

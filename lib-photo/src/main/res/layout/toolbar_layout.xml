@@ -3,7 +3,7 @@
     xmlns:toolbar="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?actionBarSize"
+    android:layout_height="wrap_content"
     toolbar:navigationIcon="@mipmap/back"
     toolbar:title="@string/app_name"
     android:background="@color/colorPrimary"

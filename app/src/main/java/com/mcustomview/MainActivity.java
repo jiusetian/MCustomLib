@@ -14,9 +14,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PhotoPick.init(this,R.color.image_color_red); //初始化
+        PhotoPick.init(this,R.color.preview_bottom_color); //初始化
         setContentView(R.layout.activity_main);
-
 
         findViewById(R.id.btn_single).setOnClickListener(new View.OnClickListener() {
             @Override

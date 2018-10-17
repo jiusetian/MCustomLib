@@ -13,17 +13,17 @@
         >
 
         <activity android:name=".Picker.ui.PhotoPreviewEditActivity"
-            android:theme="@style/PhoAppTheme.AppTheme"
+            android:theme="@style/PhotoTheme"
             />
 
         <activity
             android:name=".Picker.ui.PhotoPickActivity"
-            android:theme="@style/PhoAppTheme.Transparent"
+            android:theme="@style/PhotoTheme"
             />
 
         <activity
             android:name=".Picker.ui.PhotoPreviewActivity"
-            android:theme="@style/PhoAppTheme.AppTheme"/>
+            android:theme="@style/PhotoTheme"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -33,7 +33,7 @@
         <activity
             android:name=".Picker.display.ViewBigImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/BigImage.Theme.AppTheme"/>
+            android:theme="@style/PhotoTheme.BigImageTheme"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

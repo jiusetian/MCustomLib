@@ -17,6 +17,6 @@
     <color name="image_color_yellow">#FFCC00</color>
     <color name="image_color_blue">#0078FF</color>
 
-    <color name="preview_bottom_color">#B3000000</color>
+    <color name="preview_bottom_color">#80000000</color>
 
 </resources>

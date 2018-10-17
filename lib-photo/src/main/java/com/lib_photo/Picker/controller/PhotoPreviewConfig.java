@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.lib_photo.R;
 import com.lib_photo.Picker.PhotoPick;
 import com.lib_photo.Picker.bean.Photo;
 import com.lib_photo.Picker.bean.PhotoPreviewBean;
 import com.lib_photo.Picker.ui.PhotoPreviewEditActivity;
+import com.lib_photo.R;
 
 import java.util.ArrayList;
 
