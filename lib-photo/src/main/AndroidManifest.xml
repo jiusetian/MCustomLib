@@ -13,17 +13,17 @@
         >
 
         <activity android:name=".Picker.ui.PhotoPreviewEditActivity"
-            android:theme="@style/PhotoTheme"
+            android:theme="@style/PhotoTheme.Transparent"
             />
 
         <activity
             android:name=".Picker.ui.PhotoPickActivity"
-            android:theme="@style/PhotoTheme"
+            android:theme="@style/PhotoTheme.Transparent"
             />
 
         <activity
             android:name=".Picker.ui.PhotoPreviewActivity"
-            android:theme="@style/PhotoTheme"/>
+            android:theme="@style/PhotoTheme.Transparent"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

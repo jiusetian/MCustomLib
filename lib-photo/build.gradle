@@ -63,5 +63,5 @@ dependencies {
     api 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.nineoldandroids:library:2.4.0'
     //沉浸式状态栏
-    //implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta01'
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.2-beta01'
 }

@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.RadioGroup;
 import android.widget.ViewSwitcher;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.lib_photo.Editor.IMGTextEditDialog;
 import com.lib_photo.Editor.core.IMGMode;
 import com.lib_photo.Editor.core.IMGText;
@@ -103,6 +104,19 @@ public abstract class EditBaseActivity extends AppCompatActivity
         mColorGroup.setOnCheckedChangeListener(this);
 
         mLayoutOpSub = findViewById(R.id.layout_op_sub);
+        initImmersionBar();
+    }
+
+    protected ImmersionBar immersionBar;
+    protected void initImmersionBar() {
+        //在BaseActivity里初始化
+        immersionBar = ImmersionBar.with(this);
+        immersionBar.titleBar(toolbar, false)
+                .transparentBar()
+                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
+                .navigationBarColorTransform(R.color.colorPrimary)
+                .barAlpha(0.6f)
+                .init();
     }
 
     @Override

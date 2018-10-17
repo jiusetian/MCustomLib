@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.lib_photo.Picker.PhotoPick;
 import com.lib_photo.Picker.bean.Photo;
 import com.lib_photo.Picker.bean.PhotoPreviewBean;
 import com.lib_photo.Picker.controller.PhotoPickConfig;
@@ -87,7 +86,7 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
         //ViewPager是一个ViewGroup，就是一个view容器，pagerAdapter是一个viewpager的适配器，它决定pager所放置的内容
         viewPager = (CustomViewPager) findViewById(R.id.pager);
 
-        toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround());
+        //toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround());
         toolbar.setTitle((beginPosition + 1) + "/" + photos.size());
         setSupportActionBar(toolbar);
 
