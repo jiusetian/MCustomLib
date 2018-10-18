@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.lib_photo.Common.DividerGridItemDecoration;
+import com.lib_photo.Common.ScreenUtils;
 import com.lib_photo.Picker.BaseActivity;
 import com.lib_photo.Picker.PhotoGalleryAdapter;
 import com.lib_photo.Picker.PhotoPickAdapter;
@@ -108,6 +109,14 @@ public class PhotoPickActivity extends BaseActivity {
             @Override
             public void updateToolBarTitle(String title) {
                 headerLayout.showTitle(title);
+            }
+
+            @Override
+            public void onUpdateItemListener(View itemView, int itemPos) {
+                //第一行的item添加顶部间隔
+                if (itemPos < pickBean.getSpanCount()) {
+                    itemView.setPadding(0, ScreenUtils.getStatusHeight(PhotoPickActivity.this) + headerLayout.getHeight(), 0, 0);
+                }
             }
         });
 

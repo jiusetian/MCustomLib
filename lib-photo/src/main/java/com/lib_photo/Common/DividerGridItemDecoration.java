@@ -65,6 +65,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
     public void drawHorizontal(Canvas c, RecyclerView parent) {
         int childCount = parent.getChildCount(); //获取可见item的数量
+        int spanCount = getSpanCount(parent);
         Log.d(TAG, "drawHorizontal: 孩子的数量=" + childCount);
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
@@ -77,7 +78,33 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final int bottom = top + mDivider.getIntrinsicHeight();
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
+            if (i < spanCount) { //画第一行顶部的分割线
+                drawHorizontalForFirstRow(c, parent, child);
+            }
         }
+    }
+
+    private void drawHorizontalForFirstRow(Canvas c, RecyclerView parent, View child) {
+        final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                .getLayoutParams();
+        int left = child.getLeft() - params.leftMargin - mDivider.getIntrinsicWidth();
+        int top = child.getTop() - params.topMargin - mDivider.getIntrinsicHeight();
+        int right = child.getRight() + params.rightMargin + mDivider.getIntrinsicWidth();
+        int bottom = top + mDivider.getIntrinsicHeight();
+        Log.d(TAG, "drawHorizontalForFirstRow: 数据=" + left + ";;;;;" + top + ";;;;;" + right + ";;;;;" + bottom + ";;;;;");
+        mDivider.setBounds(left, top, right, bottom);
+        mDivider.draw(c);
+    }
+
+    private void drawVerticalForFirstColum(Canvas c, RecyclerView parent, View child) {
+        final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                .getLayoutParams();
+        int left = child.getLeft() - params.leftMargin - mDivider.getIntrinsicWidth();
+        int top = child.getTop() - params.topMargin;
+        int right = child.getLeft() - params.leftMargin;
+        int bottom = top + child.getHeight()+mDivider.getIntrinsicHeight();
+        mDivider.setBounds(left, top, right, bottom);
+        mDivider.draw(c);
     }
 
     public void drawVertical(Canvas c, RecyclerView parent) {
@@ -91,9 +118,11 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final int bottom = child.getBottom() + params.bottomMargin;
             final int left = child.getRight() + params.rightMargin;
             final int right = left + mDivider.getIntrinsicWidth();
-
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
+            if (isFirstColum(parent,i,getSpanCount(parent),childCount)){ //画第一列左边分割线
+                drawVerticalForFirstColum(c,parent,child);
+            }
         }
     }
 
@@ -176,18 +205,19 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
                                RecyclerView parent) {
         int spanCount = getSpanCount(parent); //列数
         int childCount = parent.getAdapter().getItemCount();
-        if (isLastRaw(parent, itemPosition, spanCount, childCount))// 如果是最后一行，则不需要绘制底部
-        {
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+
+        if (itemPosition == 0) { //第一行第一个，四边都画
+
+            outRect.set(mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight(),
+                    mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
+        } else if (isFirstRaw(itemPosition, spanCount)) { //第一行，画上下右三边
+            outRect.set(0, mDivider.getIntrinsicHeight(), mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
+        } else if (isFirstColum(parent, itemPosition, spanCount, childCount)) { //第一列，画左右下三边
+            outRect.set(mDivider.getIntrinsicWidth(), 0, mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
+        } else { //其他，画右下两边
+            outRect.set(0, 0, mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
         }
-        else if (isLastColum(parent, itemPosition, spanCount, childCount))// 如果是最后一列，则不需要绘制右边
-        {
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
-        }
-        else {
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(),
-                    mDivider.getIntrinsicHeight());
-        }
+
     }
 
 }

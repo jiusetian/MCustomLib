@@ -70,6 +70,7 @@ public class PhotoPickAdapter extends RecyclerView.Adapter {
     }
 
     public void refresh(List<Photo> photos) {
+
         this.photos.clear();
         this.photos.addAll(photos);
         notifyDataSetChanged();
@@ -114,6 +115,9 @@ public class PhotoPickAdapter extends RecyclerView.Adapter {
         }
 
         public void showData(int position) {
+            if (onUpdateListener != null) {
+                onUpdateListener.onUpdateItemListener(itemView, position);
+            }
             if (showCamera && position == 0) {
                 checkbox.setVisibility(View.GONE);
                 imageView.setImageResource(R.mipmap.take_photo); //显示拍照图片
@@ -123,7 +127,7 @@ public class PhotoPickAdapter extends RecyclerView.Adapter {
                     checkbox.setVisibility(View.GONE); //不显示cb
                 } else {
                     checkbox.setVisibility(View.VISIBLE);
-                    checkbox.setChecked(selectPhotos.contains(photo.getPath()),false); //没有动画
+                    checkbox.setChecked(selectPhotos.contains(photo.getPath()), false); //没有动画
                 }
                 String url = photo.getPath();
                 imageLoader.displayImage(context, url, imageView, true); //加载图片
@@ -247,5 +251,7 @@ public class PhotoPickAdapter extends RecyclerView.Adapter {
 
     public interface OnUpdateListener {
         void updateToolBarTitle(String title);
+
+        void onUpdateItemListener(View itemView, int itemPos);
     }
 }

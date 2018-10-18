@@ -25,7 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/icon_size_48dp"
-                android:paddingTop="75dp"
                 />
         </com.lib_photo.Common.ReboundScrollView>
 
