@@ -25,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/icon_size_48dp"
-                android:paddingTop="75dp" />
+                android:paddingTop="75dp"
+                />
         </com.lib_photo.Common.ReboundScrollView>
 
         <LinearLayout
@@ -64,7 +65,7 @@
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/common_header_layout" />
 </FrameLayout>
 
     <!--<android.support.design.widget.CoordinatorLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context=".Picker.ui.PhotoPickActivity"--><!--&gt;-->

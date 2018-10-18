@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +18,7 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.lib_photo.R;
 import com.lib_photo.Picker.BaseActivity;
-import com.lib_photo.Picker.PhotoPick;
 import com.lib_photo.Picker.bean.Photo;
 import com.lib_photo.Picker.bean.PhotoPreviewBean;
 import com.lib_photo.Picker.controller.PhotoPickConfig;
@@ -29,6 +26,7 @@ import com.lib_photo.Picker.controller.PhotoPreviewConfig;
 import com.lib_photo.Picker.utils.UtilsHelper;
 import com.lib_photo.Picker.weidget.CheckBox;
 import com.lib_photo.Picker.weidget.CustomViewPager;
+import com.lib_photo.R;
 
 import java.util.ArrayList;
 
@@ -81,10 +79,10 @@ public class PhotoPreviewActivity extends BaseActivity implements OnPhotoTapList
         editorTv.setVisibility(View.INVISIBLE);
         //ViewPager是一个ViewGroup，就是一个view容器，pagerAdapter是一个viewpager的适配器，它决定pager所放置的内容
         CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.pager);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround());
-        toolbar.setTitle((beginPosition + 1) + "/" + photos.size());
-        setSupportActionBar(toolbar);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround());
+//        toolbar.setTitle((beginPosition + 1) + "/" + photos.size());
+//        setSupportActionBar(toolbar);
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -95,7 +93,7 @@ public class PhotoPreviewActivity extends BaseActivity implements OnPhotoTapList
             public void onPageSelected(int position) {
                 pos = position;
                 position++;
-                toolbar.setTitle(position + "/" + photos.size());
+                //toolbar.setTitle(position + "/" + photos.size());
                 if (selectPhotos != null && selectPhotos.contains(photos.get(pos).getPath())) {
                     checkbox.setChecked(true);
                     if (pos == 1 && selectPhotos.contains(photos.get(pos - 1).getPath())) {

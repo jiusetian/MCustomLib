@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.lib_photo.Common.DividerGridItemDecoration;
 import com.lib_photo.Picker.BaseActivity;
 import com.lib_photo.Picker.PhotoGalleryAdapter;
 import com.lib_photo.Picker.PhotoPickAdapter;
@@ -78,26 +80,6 @@ public class PhotoPickActivity extends BaseActivity {
             return;
         }
 
-//        ImmersionBar.with(this)
-//                .titleBar(toolbar, false)
-//                .transparentBar()
-//                .init();
-
-//        ImmersionBar.with(this)
-//                .titleBar(toolbar, false)
-//                .transparentBar()
-//                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
-//                .navigationBarColorTransform(R.color.colorPrimary)
-//                .init();
-//
-//        ImmersionBar.with(this)
-//                .titleBar(toolbar, false)
-//                .transparentBar()
-//                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
-//                .navigationBarColorTransform(R.color.colorPrimary)
-//                .barAlpha(0.6f)
-//                .init();
-
         //申请权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             requestPermission();
@@ -108,16 +90,13 @@ public class PhotoPickActivity extends BaseActivity {
      * 初始化控件
      */
     private void init() {
-        //设置ToolBar
-        toolbar.setTitle(R.string.select_photo);
-        //toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround()); //默认红色
-
+        initToolbar(); //初始化标题栏
         //全部相册照片列表
         RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, pickBean.getSpanCount()));
+        recyclerView.addItemDecoration(new DividerGridItemDecoration(5, Color.WHITE));
         adapter = new PhotoPickAdapter(this, pickBean);
         recyclerView.setAdapter(adapter);
-
         //相册列表
         RecyclerView gallery_rv = (RecyclerView) this.findViewById(R.id.gallery_rcl);
         gallery_rv.setLayoutManager(new LinearLayoutManager(this));
@@ -128,7 +107,7 @@ public class PhotoPickActivity extends BaseActivity {
         adapter.setOnUpdateListener(new PhotoPickAdapter.OnUpdateListener() {
             @Override
             public void updateToolBarTitle(String title) {
-                toolbar.setTitle(title);
+                headerLayout.showTitle(title);
             }
         });
 
@@ -279,11 +258,30 @@ public class PhotoPickActivity extends BaseActivity {
         startActivityForResult(intent, PhotoPickActivity.REQUEST_CODE_SHOW_CAMERA);
     }
 
+    //初始化标题栏
+    private void initToolbar() {
+        //设置ToolBar
+        headerLayout.showTitle("选择图片");
+        if (!pickBean.isClipPhoto()) {
+            headerLayout.showRightTextButton("确定", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    if (adapter != null && !adapter.getSelectPhotos().isEmpty()) {
+                        if (adapter.getSelectPhotos().size() != 1) {
+                            intent.putStringArrayListExtra(PhotoPickConfig.EXTRA_STRING_ARRAYLIST, adapter.getSelectPhotos());
+                        } else
+                            intent.putExtra(PhotoPickConfig.EXTRA_SINGLE_PHOTO, adapter.getSelectPhotos().get(0));
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
+                }
+            });
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!pickBean.isClipPhoto()) {
-            getMenuInflater().inflate(R.menu.menu_ok, menu);
-        }
         return true;
     }
 
@@ -294,18 +292,6 @@ public class PhotoPickActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.ok) {
-            Intent intent = new Intent();
-            if (adapter != null && !adapter.getSelectPhotos().isEmpty()) {
-                if (adapter.getSelectPhotos().size() != 1) {
-                    intent.putStringArrayListExtra(PhotoPickConfig.EXTRA_STRING_ARRAYLIST, adapter.getSelectPhotos());
-                } else
-                    intent.putExtra(PhotoPickConfig.EXTRA_SINGLE_PHOTO, adapter.getSelectPhotos().get(0));
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -358,7 +344,7 @@ public class PhotoPickActivity extends BaseActivity {
                 }
                 selectedList.clear();
                 selectedList.addAll(set);
-                toolbar.setTitle(adapter.getTitle());
+                headerLayout.showTitle(adapter.getTitle());
                 adapter.notifyDataSetChanged();
                 break;
         }

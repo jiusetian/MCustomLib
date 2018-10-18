@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.lib_photo.Common.HeaderLayout;
 import com.lib_photo.R;
 
 /**
@@ -16,7 +17,9 @@ import com.lib_photo.R;
  */
 public class BaseActivity extends AppCompatActivity {
     public Toolbar toolbar;
+    public HeaderLayout headerLayout;
     protected ImmersionBar immersionBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,8 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(layoutId);
         if (hasTitle) {
             toolbar = findViewById(R.id.toolbar);
+            headerLayout=toolbar.findViewById(R.id.header);
             initImmersionBar();
-            setSupportActionBar(toolbar);
         }
     }
 

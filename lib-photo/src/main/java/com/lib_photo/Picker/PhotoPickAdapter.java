@@ -17,9 +17,9 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.lib_photo.R;
 import com.lib_photo.Picker.bean.Photo;
 import com.lib_photo.Picker.bean.PhotoPickBean;
 import com.lib_photo.Picker.controller.PhotoPickConfig;
@@ -29,7 +29,7 @@ import com.lib_photo.Picker.ui.PhotoPickActivity;
 import com.lib_photo.Picker.utils.FileUtils;
 import com.lib_photo.Picker.utils.UCropUtils;
 import com.lib_photo.Picker.weidget.CheckBox;
-import com.lib_photo.Picker.weidget.GalleryImageView;
+import com.lib_photo.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -98,12 +98,12 @@ public class PhotoPickAdapter extends RecyclerView.Adapter {
 
     private class PhotoPickViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private GalleryImageView imageView;
+        private ImageView imageView;
         private CheckBox checkbox;
 
         public PhotoPickViewHolder(View view) {
             super(view);
-            imageView = (GalleryImageView) itemView.findViewById(R.id.imageView);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
             checkbox = (CheckBox) itemView.findViewById(R.id.checkbox);
             //设置图片的宽高
             imageView.getLayoutParams().height = imageSize;
