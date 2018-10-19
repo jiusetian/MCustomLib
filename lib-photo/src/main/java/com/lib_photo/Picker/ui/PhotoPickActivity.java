@@ -18,12 +18,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.lib_photo.Common.DividerGridItemDecoration;
+import com.lib_photo.Common.GridItemDivider;
 import com.lib_photo.Common.ScreenUtils;
 import com.lib_photo.Picker.BaseActivity;
 import com.lib_photo.Picker.PhotoGalleryAdapter;
@@ -53,6 +54,7 @@ import java.util.List;
  */
 public class PhotoPickActivity extends BaseActivity {
 
+    private String TAG = getClass().getSimpleName();
     //权限相关
     public static final int REQUEST_CODE_SDCARD = 100;             //读写权限请求码
     public static final int REQUEST_CODE_CAMERA = 200;             //拍照权限请求码
@@ -95,7 +97,7 @@ public class PhotoPickActivity extends BaseActivity {
         //全部相册照片列表
         RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, pickBean.getSpanCount()));
-        recyclerView.addItemDecoration(new DividerGridItemDecoration(5, Color.WHITE));
+        recyclerView.addItemDecoration(new GridItemDivider(5, Color.WHITE));
         adapter = new PhotoPickAdapter(this, pickBean);
         recyclerView.setAdapter(adapter);
         //相册列表
@@ -113,9 +115,13 @@ public class PhotoPickActivity extends BaseActivity {
 
             @Override
             public void onUpdateItemListener(View itemView, int itemPos) {
+
                 //第一行的item添加顶部间隔
-                if (itemPos < pickBean.getSpanCount()) {
+                if (itemPos < pickBean.getSpanCount() && itemView.getPaddingTop() == 0) {
+                    Log.d(TAG, "onUpdateItemListener: 添加顶部间隔=" + itemPos);
                     itemView.setPadding(0, ScreenUtils.getStatusHeight(PhotoPickActivity.this) + headerLayout.getHeight(), 0, 0);
+                } else if (itemPos >= pickBean.getSpanCount() && itemView.getPaddingTop() > 0) {
+                    itemView.setPadding(0, 0, 0, 0);
                 }
             }
         });

@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,7 @@ import java.util.List;
  * Created by Rain on 17-4-28.
  */
 public class PhotoPickAdapter extends RecyclerView.Adapter {
-
+    private String TAG=getClass().getSimpleName();
     private Context context;
     private ArrayList<Photo> photos = new ArrayList<>();
     private ArrayList<String> selectPhotos = new ArrayList<>(); //被选择的图片
@@ -115,6 +116,7 @@ public class PhotoPickAdapter extends RecyclerView.Adapter {
         }
 
         public void showData(int position) {
+            Log.d(TAG, "showData: 位置="+position);
             if (onUpdateListener != null) {
                 onUpdateListener.onUpdateItemListener(itemView, position);
             }

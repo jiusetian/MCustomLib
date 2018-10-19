@@ -9,35 +9,34 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 
 /**
  * Created by XR_liu on 2018/10/18.
  * recylerview网格布局的时候，添加分割线
  */
-public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
+public class GridItemDivider extends RecyclerView.ItemDecoration {
 
     private String TAG = getClass().getSimpleName();
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
-    private Drawable mDivider;
+    private Drawable divider;
 
-    public DividerGridItemDecoration(Context context) {
+    public GridItemDivider(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
-        mDivider = a.getDrawable(0);
+        divider = a.getDrawable(0);
         a.recycle();
     }
 
-    public DividerGridItemDecoration(Drawable drawable) {
-        mDivider = drawable;
+    public GridItemDivider(Drawable drawable) {
+        divider = drawable;
     }
 
-    public DividerGridItemDecoration(int height, int color) {
+    public GridItemDivider(int height, int color) {
         GradientDrawable shapeDrawable = new GradientDrawable();
         shapeDrawable.setColor(color);
         shapeDrawable.setShape(GradientDrawable.RECTANGLE);
         shapeDrawable.setSize(height, height);
-        mDivider = shapeDrawable;
+        divider = shapeDrawable;
     }
 
 
@@ -66,45 +65,43 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     public void drawHorizontal(Canvas c, RecyclerView parent) {
         int childCount = parent.getChildCount(); //获取可见item的数量
         int spanCount = getSpanCount(parent);
-        Log.d(TAG, "drawHorizontal: 孩子的数量=" + childCount);
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int left = child.getLeft() - params.leftMargin;
             final int right = child.getRight() + params.rightMargin
-                    + mDivider.getIntrinsicWidth();
+                    + divider.getIntrinsicWidth();
             final int top = child.getBottom() + params.bottomMargin;
-            final int bottom = top + mDivider.getIntrinsicHeight();
-            mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
+            final int bottom = top + divider.getIntrinsicHeight();
+            divider.setBounds(left, top, right, bottom);
+            divider.draw(c);
             if (i < spanCount) { //画第一行顶部的分割线
-                drawHorizontalForFirstRow(c, parent, child);
+                drawHorizontalForFirstRow(c, child);
             }
         }
     }
 
-    private void drawHorizontalForFirstRow(Canvas c, RecyclerView parent, View child) {
+    private void drawHorizontalForFirstRow(Canvas c, View child) {
         final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                 .getLayoutParams();
-        int left = child.getLeft() - params.leftMargin - mDivider.getIntrinsicWidth();
-        int top = child.getTop() - params.topMargin - mDivider.getIntrinsicHeight();
-        int right = child.getRight() + params.rightMargin + mDivider.getIntrinsicWidth();
-        int bottom = top + mDivider.getIntrinsicHeight();
-        Log.d(TAG, "drawHorizontalForFirstRow: 数据=" + left + ";;;;;" + top + ";;;;;" + right + ";;;;;" + bottom + ";;;;;");
-        mDivider.setBounds(left, top, right, bottom);
-        mDivider.draw(c);
+        int left = child.getLeft() - params.leftMargin - divider.getIntrinsicWidth();
+        int top = child.getTop() - params.topMargin - divider.getIntrinsicHeight();
+        int right = child.getRight() + params.rightMargin + divider.getIntrinsicWidth();
+        int bottom = top + divider.getIntrinsicHeight();
+        divider.setBounds(left, top, right, bottom);
+        divider.draw(c);
     }
 
-    private void drawVerticalForFirstColum(Canvas c, RecyclerView parent, View child) {
+    private void drawVerticalForFirstColum(Canvas c, View child) {
         final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                 .getLayoutParams();
-        int left = child.getLeft() - params.leftMargin - mDivider.getIntrinsicWidth();
+        int left = child.getLeft() - params.leftMargin - divider.getIntrinsicWidth();
         int top = child.getTop() - params.topMargin;
         int right = child.getLeft() - params.leftMargin;
-        int bottom = top + child.getHeight()+mDivider.getIntrinsicHeight();
-        mDivider.setBounds(left, top, right, bottom);
-        mDivider.draw(c);
+        int bottom = top + child.getHeight() + divider.getIntrinsicHeight();
+        divider.setBounds(left, top, right, bottom);
+        divider.draw(c);
     }
 
     public void drawVertical(Canvas c, RecyclerView parent) {
@@ -117,11 +114,11 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getTop() - params.topMargin;
             final int bottom = child.getBottom() + params.bottomMargin;
             final int left = child.getRight() + params.rightMargin;
-            final int right = left + mDivider.getIntrinsicWidth();
-            mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
-            if (isFirstColum(parent,i,getSpanCount(parent),childCount)){ //画第一列左边分割线
-                drawVerticalForFirstColum(c,parent,child);
+            final int right = left + divider.getIntrinsicWidth();
+            divider.setBounds(left, top, right, bottom);
+            divider.draw(c);
+            if (isFirstColum(parent, i, getSpanCount(parent))) { //画第一列左边分割线
+                drawVerticalForFirstColum(c, child);
             }
         }
     }
@@ -161,14 +158,12 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             int orientation = ((StaggeredGridLayoutManager) layoutManager)
                     .getOrientation();
-            // StaggeredGridLayoutManager 且纵向滚动
             if (orientation == StaggeredGridLayoutManager.VERTICAL) {
                 childCount = childCount - childCount % spanCount;
                 // 如果是最后一行，则不需要绘制底部
                 if (pos >= childCount)
                     return true;
             } else
-            // StaggeredGridLayoutManager 且横向滚动
             {
                 // 如果是最后一行，则不需要绘制底部
                 if ((pos + 1) % spanCount == 0) {
@@ -180,12 +175,10 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     //是否为第一列
-    private boolean isFirstColum(RecyclerView parent, int pos, int spanCount,
-                                 int childCount) {
+    private boolean isFirstColum(RecyclerView parent, int pos, int spanCount) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) { //网格布局
-            childCount = (pos + 1) % spanCount;
-            if (childCount == 1) {
+            if ((pos + 1) % spanCount == 1) {
                 return true;
             }
         }
@@ -204,18 +197,16 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, int itemPosition,
                                RecyclerView parent) {
         int spanCount = getSpanCount(parent); //列数
-        int childCount = parent.getAdapter().getItemCount();
 
         if (itemPosition == 0) { //第一行第一个，四边都画
-
-            outRect.set(mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight(),
-                    mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
+            outRect.set(divider.getIntrinsicWidth(), divider.getIntrinsicHeight(),
+                    divider.getIntrinsicWidth(), divider.getIntrinsicHeight());
         } else if (isFirstRaw(itemPosition, spanCount)) { //第一行，画上下右三边
-            outRect.set(0, mDivider.getIntrinsicHeight(), mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
-        } else if (isFirstColum(parent, itemPosition, spanCount, childCount)) { //第一列，画左右下三边
-            outRect.set(mDivider.getIntrinsicWidth(), 0, mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
+            outRect.set(0, divider.getIntrinsicHeight(), divider.getIntrinsicWidth(), divider.getIntrinsicHeight());
+        } else if (isFirstColum(parent, itemPosition, spanCount)) { //第一列，画左右下三边
+            outRect.set(divider.getIntrinsicWidth(), 0, divider.getIntrinsicWidth(), divider.getIntrinsicHeight());
         } else { //其他，画右下两边
-            outRect.set(0, 0, mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());
+            outRect.set(0, 0, divider.getIntrinsicWidth(), divider.getIntrinsicHeight());
         }
 
     }
