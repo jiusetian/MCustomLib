@@ -100,7 +100,7 @@ public class PhotoPickActivity extends BaseActivity {
         recyclerView.addItemDecoration(new GridItemDivider(5, Color.WHITE));
         adapter = new PhotoPickAdapter(this, pickBean);
         recyclerView.setAdapter(adapter);
-        //相册列表
+        //相册列表d
         RecyclerView gallery_rv = (RecyclerView) this.findViewById(R.id.gallery_rcl);
         gallery_rv.setLayoutManager(new LinearLayoutManager(this));
         galleryAdapter = new PhotoGalleryAdapter(this);
