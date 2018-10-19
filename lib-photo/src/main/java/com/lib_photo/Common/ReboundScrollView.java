@@ -12,7 +12,7 @@ import android.widget.ScrollView;
  * 可上下弹动的ScrollView
  */
 public class ReboundScrollView extends ScrollView {
-
+    private String TAG = getClass().getSimpleName();
     //移动因子, 是一个百分比, 比如手指移动了100px, 那么View就只移动25px
     //目的是达到一个延迟的效果
     private static final float MOVE_FACTOR = 0.25f;

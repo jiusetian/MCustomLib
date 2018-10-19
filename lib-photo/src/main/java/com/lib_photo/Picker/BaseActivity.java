@@ -33,19 +33,13 @@ public class BaseActivity extends AppCompatActivity {
 //            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //            window.setStatusBarColor(Color.TRANSPARENT);
 //        }
-        //初始化沉浸式
-//        if (isImmersionBarEnabled())
-//            initImmersionBar();
+
     }
 
     protected void initImmersionBar() {
         //在BaseActivity里初始化
         immersionBar = ImmersionBar.with(this);
-        immersionBar.titleBar(toolbar, true)
-                .transparentBar()
-                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
-                .navigationBarColorTransform(R.color.colorPrimary)
-                .barAlpha(0.6f)
+        immersionBar
                 .init();
     }
 
@@ -54,6 +48,7 @@ public class BaseActivity extends AppCompatActivity {
         if (hasTitle) {
             toolbar = findViewById(R.id.toolbar);
             headerLayout=toolbar.findViewById(R.id.header);
+            //初始化沉浸式状态栏
             initImmersionBar();
         }
     }

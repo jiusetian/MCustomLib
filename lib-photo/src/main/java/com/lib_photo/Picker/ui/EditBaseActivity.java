@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.ViewSwitcher;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.lib_photo.Common.HeaderLayout;
 import com.lib_photo.Editor.IMGTextEditDialog;
 import com.lib_photo.Editor.core.IMGMode;
 import com.lib_photo.Editor.core.IMGText;
@@ -55,6 +56,7 @@ public abstract class EditBaseActivity extends AppCompatActivity
     public static final int OP_SUB_MOSAIC = 1;
 
     public Toolbar toolbar;
+    public HeaderLayout headerLayout;
 
 
     @Override
@@ -95,6 +97,7 @@ public abstract class EditBaseActivity extends AppCompatActivity
 
     private void initViews() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        headerLayout=toolbar.findViewById(R.id.header);
         mImgView = findViewById(R.id.image_canvas);
         mModeGroup = findViewById(R.id.rg_modes);
         mOpSwitcher = findViewById(R.id.vs_op);
@@ -111,12 +114,7 @@ public abstract class EditBaseActivity extends AppCompatActivity
     protected void initImmersionBar() {
         //在BaseActivity里初始化
         immersionBar = ImmersionBar.with(this);
-        immersionBar.titleBar(toolbar, false)
-                .transparentBar()
-                .addViewSupportTransformColor(toolbar, R.color.colorPrimary)
-                .navigationBarColorTransform(R.color.colorPrimary)
-                .barAlpha(0.6f)
-                .init();
+        immersionBar.init();
     }
 
     @Override

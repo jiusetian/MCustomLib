@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,11 +74,12 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
             finish();
             return;
         }
+
         originalPicture = bean.isOriginalPicture();
         maxPickSize = bean.getMaxPickSize();
         selectPhotos = bean.getSelectPhotos();
         final int beginPosition = bean.getPosition();
-
+        initToolbar(); //初始toolbar相关
         radioButton = (RadioButton) findViewById(R.id.radioButton);
         checkbox = (CheckBox) findViewById(R.id.checkbox);
         editorTv = findViewById(R.id.edit_tv); //编辑
@@ -87,8 +88,7 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
         viewPager = (CustomViewPager) findViewById(R.id.pager);
 
         //toolbar.setBackgroundColor(PhotoPick.getToolbarBackGround());
-        toolbar.setTitle((beginPosition + 1) + "/" + photos.size());
-        setSupportActionBar(toolbar);
+        headerLayout.showTitle((beginPosition + 1) + "/" + photos.size());
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -101,14 +101,14 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
                 setEditImg(photos.get(position).getPath()); //设置当前编辑图片
                 pos = position;
                 position++;
-                toolbar.setTitle(position + "/" + photos.size());
+                headerLayout.showTitle(position + "/" + photos.size());
                 if (selectPhotos != null && selectPhotos.contains(photos.get(pos).getPath())) {
-                    checkbox.setChecked(true,false);
+                    checkbox.setChecked(true, false);
                     if (pos == 1 && selectPhotos.contains(photos.get(pos - 1).getPath())) {
-                        checkbox.setChecked(true,false); //没有动画
+                        checkbox.setChecked(true, false); //没有动画
                     }
                 } else {
-                    checkbox.setChecked(false,false);
+                    checkbox.setChecked(false, false);
                 }
                 if (originalPicture) {
                     radioButton.setText(getString(R.string.image_size, UtilsHelper.formatFileSize(photos.get(pos).getSize())));
@@ -141,7 +141,7 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
                     selectPhotos.add(path);
                     checkbox.setChecked(true);
                 }
-                updateMenuItemTitle();
+                updateRightTitle();
             }
         });
 
@@ -176,6 +176,42 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
         setEditImageView();
     }
 
+    //TODO 初始化标题栏
+    private void initToolbar() {
+        //设置ToolBar
+        headerLayout.showRightTextButton(selectPhotos.isEmpty() ? getString(R.string.send) :
+                getString(R.string.sends, String.valueOf(selectPhotos.size()), String.valueOf(maxPickSize)), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (maxPickSize == 1) { //单选
+                    if (selectPhotos.size() == 0) {
+                        selectPhotos.add(photos.get(pos).getPath());
+                    }
+                    backTo();
+                } else { //多选
+                    if (selectPhotos.size() == 0) return;
+                    backTo();
+                }
+            }
+        });
+
+        headerLayout.showLeftImageButton(R.mipmap.common_base_header_back_btn, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: 点击了");
+                backTo();
+            }
+        });
+
+//        headerLayout.setLeftBtnListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "onClick: 点击了");
+//                backTo();
+//            }
+//        });
+    }
+
     /**
      * 刷新数据
      */
@@ -200,43 +236,31 @@ public class PhotoPreviewEditActivity extends EditActivity implements OnPhotoTap
         return currentUri;
     }
 
-    private void updateMenuItemTitle() {
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        immersionBar
+                .titleBar(toolbar, false)
+                .transparentBar()
+                .addViewSupportTransformColor(toolbar, R.color.image_color_black)
+                .navigationBarColor(R.color.image_color_black)
+                .barAlpha(0.7f)
+                .init();
+    }
+
+
+    //更新右边的title
+    private void updateRightTitle() {
         if (selectPhotos.isEmpty()) {
-            menuItem.setTitle(R.string.send);
+            headerLayout.updateRightTitle(getString(R.string.send));
         } else {
-            menuItem.setTitle(getString(R.string.sends, String.valueOf(selectPhotos.size()), String.valueOf(maxPickSize)));
+            headerLayout.updateRightTitle(getString(R.string.sends, String.valueOf(selectPhotos.size()), String.valueOf(maxPickSize)));
         }
     }
 
-    private MenuItem menuItem;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_ok, menu);
-        menuItem = menu.findItem(R.id.ok);
-        updateMenuItemTitle();
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.ok) { //发送
-            if (maxPickSize == 1) { //单选
-                if (selectPhotos.size() == 0) {
-                    selectPhotos.add(photos.get(pos).getPath());
-                }
-                backTo();
-
-            } else { //多选
-                if (selectPhotos.size() == 0) return true;
-                backTo();
-            }
-
-            return true;
-        } else if (item.getItemId() == android.R.id.home) { //返回
-            backTo();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

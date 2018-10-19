@@ -89,6 +89,18 @@ public class PhotoPickActivity extends BaseActivity {
         else init();
     }
 
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        immersionBar
+                .titleBar(toolbar, false)
+                .transparentBar()
+                .addViewSupportTransformColor(toolbar, R.color.image_color_black)
+                .navigationBarColor(R.color.image_color_black)
+                .barAlpha(0.7f)
+                .init();
+    }
+
     /**
      * 初始化控件
      */

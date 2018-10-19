@@ -61,6 +61,11 @@ public class HeaderLayout extends LinearLayout {
         });
     }
 
+    //设置左边按钮的点击事件
+    public void setLeftBtnListener(OnClickListener leftBtnListener){
+        leftContainer.setOnClickListener(leftBtnListener);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -111,8 +116,7 @@ public class HeaderLayout extends LinearLayout {
     //设置左边图标按钮
     public void showLeftImageButton(int leftResId, OnClickListener listener) {
         leftButton = (TextView) leftContainer.findViewById(R.id.leftBtn);
-        leftButton.setVisibility(VISIBLE);
-        leftButton.setCompoundDrawables(getResources().getDrawable(leftResId),null,null,null);//通过资源id设置imageview的图标
+        leftButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(leftResId),null,null,null);//通过资源id设置imageview的图标
         leftButton.setClickable(false);
         leftContainer.setOnClickListener(listener);
     }
@@ -148,6 +152,12 @@ public class HeaderLayout extends LinearLayout {
         textView.setTextSize(18);
         rightContainer.addView(textView);
         rightContainer.setOnClickListener(listener);
+    }
+
+    //更新右边的title
+    public void updateRightTitle(String title){
+        TextView tv= (TextView) rightContainer.getChildAt(0);
+        tv.setText(title);
     }
 
     public void showRightView(boolean isShow) {
